@@ -3,7 +3,8 @@ DATA_PATH="/home/hluser/hl/data"
 
 # Folders to exclude from pruning
 # Example: EXCLUDES=("visor_child_stderr" "rate_limited_ips" "node_logs")
-EXCLUDES=("visor_child_stderr")
+# EXCLUDES=("visor_child_stderr")
+EXCLUDES=()
 
 # Log startup for debugging
 echo "$(date): Prune script started" >> /proc/1/fd/1
@@ -28,7 +29,8 @@ for dir in "${EXCLUDES[@]}"; do
 done
 
 # Delete data older than 48 hours = 60 minutes * 48 hours
-HOURS=$((60*48))
+# HOURS=$((60*48))
+HOURS=15
 find "$DATA_PATH" -mindepth 1 "${PRUNE_ARGS[@]}" -type f -mmin +$HOURS -exec rm {} +
 
 # Get directory size after pruning

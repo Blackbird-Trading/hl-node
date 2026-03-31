@@ -19,3 +19,7 @@ services:
 volumes:
   hl-data:
     driver: local
+    driver_opts:
+      type: "none"
+      device: "/var/lib/docker/volumes/hl-data/_data"
+      o: "bind,size=10G" # Soft enforcement depending on host OS support

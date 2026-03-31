@@ -19,8 +19,27 @@ RUN groupadd --gid $USER_GID $USERNAME \
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
 # Configure chain to testnet
-RUN echo '{"chain": "Testnet"}' > /home/$USERNAME/visor.json
+RUN echo '{"chain": "Mainnet"}' > /home/$USERNAME/visor.json
+
+# Create the validated, schema-compliant gossip config for 2026
+RUN echo '{ \
+  "root_node_ips": [ \
+    {"Ip": "54.199.122.133"}, \
+    {"Ip": "218.33.8.227"}, \
+    {"Ip": "54.238.174.48"} \
+  ], \
+  "try_new_peers": true, \
+  "chain": "Mainnet" \
+}' > /home/$USERNAME/override_gossip_config.json
+
+# Ensure the user has permissions to read this file
+RUN chown $USERNAME:$USERNAME /home/$USERNAME/override_gossip_config.json
+
+# Set ownership to the hluser
+RUN chown -R hluser:hluser /home/hluser/hl
 
 # Import GPG public key
 RUN curl -o /home/$USERNAME/pub_key.asc $PUB_KEY_URL \
@@ -36,4 +55,4 @@ RUN curl -o /home/$USERNAME/hl-visor $HL_VISOR_URL \
 EXPOSE 4000-4010
 
 # Run a non-validating node
-ENTRYPOINT ["/home/hluser/hl-visor", "run-non-validator", "--replica-cmds-style", "recent-actions"]
+ENTRYPOINT ["/home/hluser/hl-visor", "run-non-validator", "--replica-cmds-style", "recent-actions", "--base-dir", "/home/hluser/hl/data"]
