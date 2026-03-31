@@ -7,10 +7,10 @@ services:
     ports:
       - "4000-4010:4000-4010"
     volumes:
-      - ./hl-data:/home/hluser/hl/data
+      - ./hl-data:/home/hluser/hl/hyperliquid_data
 
   pruner:
     restart: unless-stopped
     build: ./pruner
     volumes:
-      - ./hl-data:/home/hluser/hl/data
+      - ./hl-data:/home/hluser/hl/hyperliquid_data

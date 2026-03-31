@@ -1,5 +1,5 @@
 #!/bin/bash
-DATA_PATH="/home/hluser/hl/data"
+DATA_PATH="/home/hluser/hl/hyperliquid_data"
 
 # Folders to exclude from pruning
 # Example: EXCLUDES=("visor_child_stderr" "rate_limited_ips" "node_logs")
@@ -30,7 +30,7 @@ done
 
 # Delete data older than 48 hours = 60 minutes * 48 hours
 # HOURS=$((60*48))
-HOURS=15
+HOURS=5
 find "$DATA_PATH" -mindepth 1 "${PRUNE_ARGS[@]}" -type f -mmin +$HOURS -exec rm {} +
 
 # Get directory size after pruning
